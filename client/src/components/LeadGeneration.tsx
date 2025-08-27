@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -93,7 +93,7 @@ export function LeadGeneration() {
   });
 
   // Handle WebSocket messages for real-time updates
-  React.useEffect(() => {
+  useEffect(() => {
     if (lastMessage) {
       if (lastMessage.type === "scraping_progress") {
         setCurrentCampaign((prev: any) => prev ? {

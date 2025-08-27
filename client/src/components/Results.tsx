@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import type { Lead } from "@shared/schema";
 
 export function Results() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,7 +19,7 @@ export function Results() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: leads = [], isLoading } = useQuery({
+  const { data: leads = [], isLoading } = useQuery<Lead[]>({
     queryKey: ["/api/leads"],
   });
 
@@ -44,7 +45,7 @@ export function Results() {
     },
   });
 
-  const filteredLeads = leads.filter((lead: any) => {
+  const filteredLeads = leads.filter((lead: Lead) => {
     const matchesSearch = lead.businessName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (lead.category && lead.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          (lead.city && lead.city.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -65,7 +66,7 @@ export function Results() {
   const handleExport = () => {
     // Simple CSV export
     const csvHeaders = ["Business Name", "Category", "Phone", "Email", "Website", "Address", "City", "State", "Status"];
-    const csvData = filteredLeads.map((lead: any) => [
+    const csvData = filteredLeads.map((lead: Lead) => [
       lead.businessName,
       lead.category || "",
       lead.phone || "",
@@ -78,7 +79,7 @@ export function Results() {
     ]);
     
     const csvContent = [csvHeaders, ...csvData]
-      .map(row => row.map(cell => `"${cell}"`).join(","))
+      .map(row => row.map((cell: any) => `"${cell}"`).join(","))
       .join("\n");
     
     const blob = new Blob([csvContent], { type: "text/csv" });

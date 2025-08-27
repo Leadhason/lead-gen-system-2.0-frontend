@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import type { Lead } from "@shared/schema";
 
 export function Dashboard() {
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<any>({
     queryKey: ["/api/stats"],
   });
 
-  const { data: recentLeads, isLoading: leadsLoading } = useQuery({
+  const { data: recentLeads, isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ["/api/leads"],
   });
 
@@ -123,7 +124,7 @@ export function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentLeads.slice(0, 5).map((lead: any, index: number) => (
+                  {recentLeads.slice(0, 5).map((lead: Lead, index: number) => (
                     <tr key={lead.id} className="border-b border-border/50" data-testid={`row-lead-${index}`}>
                       <td className="py-3 text-foreground font-medium">{lead.businessName}</td>
                       <td className="py-3 text-muted-foreground">{lead.category || "N/A"}</td>

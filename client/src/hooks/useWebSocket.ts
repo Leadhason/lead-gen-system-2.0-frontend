@@ -23,7 +23,7 @@ export function useWebSocket() {
       // Authenticate the connection
       ws.send(JSON.stringify({
         type: 'auth',
-        userId: user.id
+        userId: (user as any)?.id
       }));
     };
 

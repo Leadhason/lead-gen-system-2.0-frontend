@@ -6,13 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import type { File as FileType } from "@shared/schema";
 
 export function FileManagement() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: files = [], isLoading } = useQuery({
+  const { data: files = [], isLoading } = useQuery<FileType[]>({
     queryKey: ["/api/files"],
   });
 
@@ -186,7 +187,7 @@ export function FileManagement() {
             </div>
           ) : (
             <div className="space-y-3">
-              {files.map((file: any, index: number) => (
+              {files.map((file: FileType, index: number) => (
                 <div 
                   key={file.id} 
                   className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
@@ -199,7 +200,7 @@ export function FileManagement() {
                       <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                         <span>{formatFileSize(file.fileSize)}</span>
                         <span>•</span>
-                        <span>{new Date(file.uploadedAt).toLocaleDateString()}</span>
+                        <span>{file.uploadedAt ? new Date(file.uploadedAt).toLocaleDateString() : 'N/A'}</span>
                       </div>
                     </div>
                   </div>

@@ -2,25 +2,26 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import type { Campaign, Lead } from "@shared/schema";
 
 export function Analytics() {
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<any>({
     queryKey: ["/api/stats"],
   });
 
-  const { data: campaigns = [], isLoading: campaignsLoading } = useQuery({
+  const { data: campaigns = [], isLoading: campaignsLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
   });
 
-  const { data: leads = [], isLoading: leadsLoading } = useQuery({
+  const { data: leads = [], isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ["/api/leads"],
   });
 
   // Calculate analytics data
   const analytics = {
     totalCampaigns: campaigns.length,
-    completedCampaigns: campaigns.filter((c: any) => c.status === "completed").length,
-    activeCampaigns: campaigns.filter((c: any) => c.status === "running").length,
+    completedCampaigns: campaigns.filter((c: Campaign) => c.status === "completed").length,
+    activeCampaigns: campaigns.filter((c: Campaign) => c.status === "running").length,
     averageLeadsPerCampaign: campaigns.length > 0 ? Math.round(leads.length / campaigns.length) : 0,
     topCategories: getTopCategories(leads),
     recentPerformance: getRecentPerformance(campaigns),
@@ -130,7 +131,7 @@ export function Analytics() {
               </div>
             ) : (
               <div className="space-y-4">
-                {campaigns.slice(0, 5).map((campaign: any, index: number) => (
+                {campaigns.slice(0, 5).map((campaign: Campaign, index: number) => (
                   <div key={campaign.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                     <div className="flex-1">
                       <p className="font-medium text-foreground text-sm">{campaign.name}</p>

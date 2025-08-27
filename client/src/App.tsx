@@ -20,6 +20,11 @@ function Router() {
         <>
           <Route path="/" component={Home} />
           <Route path="/dashboard" component={Home} />
+          <Route path="/lead-generation" component={Home} />
+          <Route path="/results" component={Home} />
+          <Route path="/analytics" component={Home} />
+          <Route path="/files" component={Home} />
+          <Route path="/settings" component={Home} />
         </>
       )}
       <Route component={NotFound} />
